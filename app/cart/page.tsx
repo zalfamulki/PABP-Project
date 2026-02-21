@@ -186,11 +186,11 @@ function EmptyCart() {
             <Zap className="w-8 h-8 text-neon-pink animate-pulse" />
          </div>
       </div>
-      <h2 className="text-2xl font-black text-white mb-3 uppercase tracking-widest">NO LOOT DETECTED</h2>
-      <p className="text-sm text-gray-500 mb-10 italic">Your digital arsenal is currently empty.</p>
+      <h2 className="text-2xl font-black text-white mb-3 uppercase tracking-widest">No Products Yet</h2>
+      <p className="text-sm text-gray-500 mb-10 italic">Keranjang belanja Anda masih kosong.</p>
       <Link href="/products" className="inline-flex items-center gap-3 px-8 py-4 rounded-xl bg-white/5 border border-white/10 text-white font-black uppercase tracking-widest hover:bg-neon-cyan hover:text-game-dark transition-all duration-300">
         <ArrowLeft className="w-5 h-5" />
-        START MISSION
+     Mulai Belanja
       </Link>
     </div>
   );

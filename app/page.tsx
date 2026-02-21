@@ -24,8 +24,8 @@ function Hero() {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="max-w-3xl">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass border-neon-cyan/30 text-neon-cyan text-xs font-bold uppercase tracking-[0.2em] mb-6 animate-bounce">
-           <Cpu className="w-4 h-4" />
-            Next-Gen Architecture Powered
+        
+        Pengiriman cepat ke seluruh Indonesia.
           </div>
 
           <h1 className="text-5xl sm:text-7xl font-black leading-[1.1] mb-6 tracking-tighter">

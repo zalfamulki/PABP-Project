@@ -15,7 +15,7 @@ export default function Footer() {
               ZallShop
             </Link>
             <p className="mt-2 text-sm text-gray-400">
-              The ultimate gaming marketplace demo. Powering your digital adventures with cutting-edge tech.
+             Kami menghubungkan Anda dengan berbagai produk berkualitas dari penjual terpercaya. Nikmati pengalaman belanja online yang aman, nyaman, dan menyenangkan.
             </p>
           </div>
 

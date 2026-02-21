@@ -30,7 +30,7 @@ export default function Navbar() {
             href="/"
             className="flex items-center gap-2 text-neon-cyan font-black text-2xl hover:text-white transition-all neon-text-cyan"
           >
-            <Gamepad2 className="w-8 h-8" />
+           
             <span className="tracking-tighter">ZALLSHOP</span>
           </Link>
 
