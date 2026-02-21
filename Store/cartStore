@@ -1,0 +1,75 @@
+
+export type Product = {
+  id: number;
+  title: string;
+  price: number;
+  thumbnail: string;
+};
+
+// Item di cart
+export type CartItem = {
+  product: Product;
+  quantity: number;
+};
+
+// State Zustand
+export type CartState = {
+  items: CartItem[];
+  isOpen: boolean;
+
+  addItem: (product: Product) => void;
+  removeItem: (id: number) => void;
+  updateQuantity: (id: number, quantity: number) => void;
+  clearCart: () => void;
+};
+
+
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+
+export const useCartStore = create<CartState>()(
+  persist(
+    (set, get) => ({
+      items: [],
+      isOpen: false,
+
+      addItem: (product) => {
+        const existing = get().items.find(
+          (i) => i.product.id === product.id
+        );
+
+        if (existing) {
+          set((state) => ({
+            items: state.items.map((i) =>
+              i.product.id === product.id
+                ? { ...i, quantity: i.quantity + 1 }
+                : i
+            ),
+          }));
+        } else {
+          set((state) => ({
+            items: [...state.items, { product, quantity: 1 }],
+          }));
+        }
+      },
+
+      removeItem: (id) =>
+        set((state) => ({
+          items: state.items.filter((i) => i.product.id !== id),
+        })),
+
+      updateQuantity: (id, quantity) =>
+        set((state) => ({
+          items: state.items.map((i) =>
+            i.product.id === id ? { ...i, quantity } : i
+          ),
+        })),
+
+      clearCart: () => set({ items: [] }),
+    }),
+    {
+      name: "nextshop-cart",
+      storage: createJSONStorage(() => localStorage),
+    }
+  )
+);
