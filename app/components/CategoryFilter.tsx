@@ -18,7 +18,7 @@ export default function CategoryFilter({ categories }: CategoryFilterProps) {
     (slug: string) => {
       const params = new URLSearchParams(searchParams.toString());
       if (activeCategory === slug) {
-        params.delete("category"); // klik kategori aktif → hapus filter
+        params.delete("category");
       } else {
         params.set("category", slug);
       }
@@ -30,17 +30,17 @@ export default function CategoryFilter({ categories }: CategoryFilterProps) {
   );
 
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap gap-3">
       {/* Tombol All */}
       <button
         onClick={() => handleClick("")}
-        className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 ${
+        className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 border ${
           !activeCategory
-            ? "bg-indigo-600 text-white shadow-sm"
-            : "bg-white text-gray-600 border border-gray-300 hover:border-indigo-300"
+            ? "bg-neon-cyan text-game-dark border-neon-cyan shadow-[0_0_15px_rgba(0,243,255,0.4)]"
+            : "bg-white/5 text-gray-400 border-white/10 hover:border-neon-cyan/50 hover:text-white"
         }`}
       >
-        Semua
+        ALL GEARS
       </button>
 
       {/* Tombol per kategori */}
@@ -48,10 +48,10 @@ export default function CategoryFilter({ categories }: CategoryFilterProps) {
         <button
           key={cat.slug}
           onClick={() => handleClick(cat.slug)}
-          className={`px-3 py-1.5 rounded-full text-xs font-medium capitalize transition-all duration-200 ${
+          className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 border ${
             activeCategory === cat.slug
-              ? "bg-indigo-600 text-white shadow-sm"
-              : "bg-white text-gray-600 border border-gray-300 hover:border-indigo-300"
+              ? "bg-neon-purple text-white border-neon-purple shadow-[0_0_15px_rgba(188,19,254,0.4)]"
+              : "bg-white/5 text-gray-400 border-white/10 hover:border-neon-purple/50 hover:text-white"
           }`}
         >
           {cat.name}

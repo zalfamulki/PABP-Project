@@ -1,50 +1,50 @@
 // components/Footer.tsx
 import Link from "next/link";
-import { Store } from "lucide-react";
+import { Gamepad2 } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="bg-white border-t border-gray-200 mt-16">
+    <footer className="bg-game-dark border-t border-white/10 mt-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
 
           {/* Brand */}
           <div>
-            <Link href="/" className="flex items-center gap-2 text-indigo-600 font-bold text-lg">
-              <Store className="w-5 h-5" />
-              NextShop
+            <Link href="/" className="flex items-center gap-2 text-neon-cyan font-bold text-xl neon-text-cyan">
+              <Gamepad2 className="w-6 h-6" />
+              ZallShop
             </Link>
-            <p className="mt-2 text-sm text-gray-500">
-              Demo Next.js 14 dengan SSG, SSR, CSR, Zustand, dan optimasi performa.
+            <p className="mt-2 text-sm text-gray-400">
+              The ultimate gaming marketplace demo. Powering your digital adventures with cutting-edge tech.
             </p>
           </div>
 
           {/* Navigasi */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-700 mb-3">Navigasi</h3>
-            <ul className="space-y-2 text-sm text-gray-500">
-              <li><Link href="/" className="hover:text-indigo-600 transition-colors">Home (SSG)</Link></li>
-              <li><Link href="/products" className="hover:text-indigo-600 transition-colors">Products (SSR)</Link></li>
-              <li><Link href="/cart" className="hover:text-indigo-600 transition-colors">Cart (CSR)</Link></li>
+            <h3 className="text-sm font-semibold text-white mb-3 uppercase tracking-widest">Navigasi</h3>
+            <ul className="space-y-2 text-sm text-gray-400">
+              <li><Link href="/" className="hover:text-neon-cyan transition-colors">Home (SSG)</Link></li>
+              <li><Link href="/products" className="hover:text-neon-cyan transition-colors">Marketplace (SSR)</Link></li>
+              <li><Link href="/cart" className="hover:text-neon-cyan transition-colors">Cart (CSR)</Link></li>
             </ul>
           </div>
 
           {/* Tech Stack */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-700 mb-3">Tech Stack</h3>
-            <ul className="space-y-1 text-sm text-gray-500">
-              <li>Next.js 14 (App Router)</li>
-              <li>TypeScript</li>
-              <li>Tailwind CSS</li>
-              <li>Zustand</li>
-              <li>dummyjson.com API</li>
+            <h3 className="text-sm font-semibold text-white mb-3 uppercase tracking-widest">Tech Stack</h3>
+            <ul className="space-y-1 text-sm text-gray-400">
+              <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 bg-neon-cyan rounded-full"></span> Next.js 14 (App Router)</li>
+              <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 bg-neon-purple rounded-full"></span> TypeScript</li>
+              <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 bg-neon-pink rounded-full"></span> Tailwind CSS</li>
+              <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 bg-neon-lime rounded-full"></span> Zustand</li>
+              <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 bg-white rounded-full"></span> dummyjson.com API</li>
             </ul>
           </div>
 
         </div>
 
-        <div className="mt-8 pt-6 border-t border-gray-100 text-center text-xs text-gray-400">
-          © {new Date().getFullYear()} NextShop · Tugas Pengembangan Aplikasi Berbasis Platform
+        <div className="mt-8 pt-6 border-t border-white/5 text-center text-xs text-gray-500">
+          © {new Date().getFullYear()} ZallShop · Tugas Pengembangan Aplikasi Berbasis Platform
         </div>
       </div>
     </footer>

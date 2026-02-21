@@ -27,9 +27,9 @@ interface ProductsPageProps {
 
 // generateMetadata dinamis berdasarkan searchParams
 export async function generateMetadata({ searchParams }: ProductsPageProps): Promise<Metadata> {
-  if (searchParams.q) return { title: `Hasil: "${searchParams.q}"` };
-  if (searchParams.category) return { title: `Kategori: ${searchParams.category}` };
-  return { title: "Semua Produk" };
+  if (searchParams.q) return { title: `Search: "${searchParams.q}"` };
+  if (searchParams.category) return { title: `Category: ${searchParams.category}` };
+  return { title: "Marketplace" };
 }
 
 // ── Product Grid (async Server Component) ────────────────────────────────────
@@ -54,10 +54,10 @@ async function ProductGrid({
 
     if (products.length === 0) {
       return (
-        <div className="col-span-full text-center py-20">
-          <ServerCrash className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-gray-600">Tidak ada produk ditemukan</h3>
-          <p className="text-sm text-gray-400 mt-1">Coba kata kunci atau kategori lain</p>
+        <div className="col-span-full text-center py-20 bg-game-card rounded-2xl border border-dashed border-white/10">
+          <ServerCrash className="w-16 h-16 text-neon-pink mx-auto mb-4 opacity-50" />
+          <h3 className="text-xl font-bold text-white">NO LOOT FOUND</h3>
+          <p className="text-sm text-gray-500 mt-2 italic">Gagal menemukan item di koordinat ini.</p>
         </div>
       );
     }
@@ -65,11 +65,13 @@ async function ProductGrid({
     return (
       <>
         {/* Info jumlah hasil */}
-        <p className="col-span-full text-sm text-gray-500 mb-2">
-          Menampilkan {products.length} dari {total} produk
-          {query && ` untuk "${query}"`}
-          {category && ` dalam kategori "${category}"`}
-        </p>
+        <div className="col-span-full mb-4 flex items-center gap-2">
+           <div className="h-px flex-1 bg-white/10" />
+           <p className="text-[10px] font-bold text-neon-cyan uppercase tracking-widest px-4 py-1 rounded-full border border-neon-cyan/20">
+            {total} ITEMS DETECTED
+          </p>
+           <div className="h-px flex-1 bg-white/10" />
+        </div>
 
         {/* Kartu produk */}
         {products.map((product) => (
@@ -78,14 +80,15 @@ async function ProductGrid({
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="col-span-full flex items-center justify-center gap-2 mt-8">
+          <div className="col-span-full flex items-center justify-center gap-3 mt-12">
             {page > 1 && (
               <PaginationLink
                 href={buildHref({ query, category, page: page - 1 })}
-                label="Prev"
+                label="PREV"
                 icon={<ChevronLeft className="w-4 h-4" />}
               />
             )}
+            <div className="flex items-center gap-2 px-4 py-2 bg-game-card border border-white/10 rounded-xl">
             {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
               const p = i + Math.max(1, page - 2);
               if (p > totalPages) return null;
@@ -98,10 +101,11 @@ async function ProductGrid({
                 />
               );
             })}
+            </div>
             {page < totalPages && (
               <PaginationLink
                 href={buildHref({ query, category, page: page + 1 })}
-                label="Next"
+                label="NEXT"
                 icon={<ChevronRight className="w-4 h-4" />}
               />
             )}
@@ -111,11 +115,11 @@ async function ProductGrid({
     );
   } catch {
     return (
-      <div className="col-span-full text-center py-20">
-        <ServerCrash className="w-12 h-12 text-red-300 mx-auto mb-4" />
-        <h3 className="text-lg font-semibold text-gray-600">Gagal memuat produk</h3>
-        <p className="text-sm text-gray-400 mt-1">Periksa koneksi internet dan coba lagi.</p>
-        <Link href="/products" className="btn-primary mt-4">Coba Lagi</Link>
+      <div className="col-span-full text-center py-20 bg-game-card rounded-2xl border border-red-500/20">
+        <ServerCrash className="w-16 h-16 text-neon-pink mx-auto mb-4" />
+        <h3 className="text-xl font-bold text-white uppercase tracking-widest">SYSTEM OVERLOAD</h3>
+        <p className="text-sm text-gray-400 mt-2 italic">Koneksi ke data center terputus.</p>
+        <Link href="/products" className="btn-neon mt-6 inline-block">REBOOT CONNECTION</Link>
       </div>
     );
   }
@@ -144,10 +148,10 @@ function PaginationLink({
   return (
     <Link
       href={href}
-      className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+      className={`flex items-center gap-1 px-4 py-2 rounded-lg text-xs font-black transition-all ${
         active
-          ? "bg-indigo-600 text-white shadow-sm"
-          : "bg-white text-gray-600 border border-gray-300 hover:border-indigo-300"
+          ? "bg-neon-cyan text-game-dark shadow-[0_0_15px_rgba(0,243,255,0.4)]"
+          : "text-gray-400 hover:text-white hover:bg-white/5"
       }`}
     >
       {icon}
@@ -175,43 +179,50 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
   const categories = await getCategories();
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* Header */}
-      <div className="mb-6">
-        <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
-          <span className="badge bg-blue-100 text-blue-700">SSR</span>
-          <span>Data di-fetch di server setiap request</span>
+    <div className="min-h-screen bg-game-dark">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Header */}
+        <div className="mb-10 relative">
+          <div className="absolute -left-4 top-0 w-1 h-12 bg-neon-cyan shadow-[0_0_10px_rgba(0,243,255,0.8)]" />
+          <div className="flex items-center gap-3 mb-2">
+            <span className="px-2 py-0.5 rounded bg-neon-cyan/10 border border-neon-cyan/30 text-[10px] font-bold text-neon-cyan tracking-widest">
+              SSR ACTIVE
+            </span>
+            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">REAL-TIME DATA STREAM</span>
+          </div>
+          <h1 className="text-4xl font-black text-white tracking-tighter uppercase italic">
+             MARKET<span className="text-neon-cyan">PLACE</span>
+          </h1>
         </div>
-        <h1 className="text-3xl font-bold text-gray-900">Semua Produk</h1>
-      </div>
 
-      {/* Search — wajib dibungkus Suspense karena useSearchParams() */}
-      <div className="bg-white rounded-xl border border-gray-200 p-4 mb-6">
-        <Suspense fallback={<div className="skeleton h-10 w-full rounded-lg" />}>
-          <SearchBar />
-        </Suspense>
-      </div>
+        {/* Search */}
+        <div className="mb-8 group">
+          <Suspense fallback={<div className="skeleton h-14 w-full rounded-xl" />}>
+            <SearchBar />
+          </Suspense>
+        </div>
 
-      {/* Category Filter — wajib dibungkus Suspense */}
-      <div className="mb-6">
-        <Suspense
-          fallback={
-            <div className="flex gap-2">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="skeleton h-7 w-20 rounded-full" />
-              ))}
-            </div>
-          }
-        >
-          <CategoryFilter categories={categories} />
-        </Suspense>
-      </div>
+        {/* Category Filter */}
+        <div className="mb-10">
+          <Suspense
+            fallback={
+              <div className="flex gap-2 overflow-x-auto pb-2">
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <div key={i} className="skeleton h-8 w-24 rounded-full flex-shrink-0" />
+                ))}
+              </div>
+            }
+          >
+            <CategoryFilter categories={categories} />
+          </Suspense>
+        </div>
 
-      {/* Grid Produk */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-        <Suspense fallback={<ProductsLoading />}>
-          <ProductGrid query={query} category={category} page={page} />
-        </Suspense>
+        {/* Grid Produk */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <Suspense fallback={<ProductsLoading />}>
+            <ProductGrid query={query} category={category} page={page} />
+          </Suspense>
+        </div>
       </div>
     </div>
   );

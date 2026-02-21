@@ -1,7 +1,5 @@
 // lib/api.ts
 
-const BASE_URL = "https://dummyjson.com";
-
 // ─── Type Definitions ───────────────────────────────────────────────────────
 
 export interface Product {
@@ -16,7 +14,7 @@ export interface Product {
   category: string;
   thumbnail: string;
   images: string[];
-  tags: string[];
+  tags?: string[];
 }
 
 export interface ProductsResponse {
@@ -32,21 +30,39 @@ export interface Category {
   url: string;
 }
 
-// ─── SSG: cache: "force-cache" ──────────────────────────────────────────────
-// Data di-fetch SATU KALI saat `npm run build`.
-// Semua request berikutnya pakai data yang sama (0 latency API).
+// ─── Constants ──────────────────────────────────────────────────────────────
 
-export async function getCategories(): Promise<Category[]> {
-  const res = await fetch(`${BASE_URL}/products/categories`, {
-    cache: "force-cache",
-  });
-  if (!res.ok) throw new Error(`Gagal fetch kategori: ${res.status}`);
-  return res.json();
+const BASE_URL = "https://dummyjson.com";
+const USD_TO_IDR = 15000;
+
+// ─── Utility Functions ──────────────────────────────────────────────────────
+
+export function formatCurrency(amount: number): string {
+  return new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    minimumFractionDigits: 0,
+  }).format(amount);
 }
 
-// ─── SSR: cache: "no-store" ─────────────────────────────────────────────────
-// Data di-fetch SETIAP REQUEST dari server.
-// Cocok untuk halaman yang datanya sering berubah atau perlu search/filter.
+export function calcDiscountedPrice(price: number, discountPercentage: number): number {
+  return price * (1 - discountPercentage / 100);
+}
+
+function adjustProductPrice(product: Product): Product {
+  return {
+    ...product,
+    price: Math.round(product.price * USD_TO_IDR),
+  };
+}
+
+// ─── API Functions ──────────────────────────────────────────────────────────
+
+export async function getCategories(): Promise<Category[]> {
+  const res = await fetch(`${BASE_URL}/products/categories`);
+  if (!res.ok) throw new Error("Gagal mengambil kategori");
+  return res.json();
+}
 
 export async function getProducts(params?: {
   limit?: number;
@@ -56,44 +72,31 @@ export async function getProducts(params?: {
 }): Promise<ProductsResponse> {
   const { limit = 12, skip = 0, category, search } = params ?? {};
 
-  let url: string;
+  let url = `${BASE_URL}/products`;
 
   if (search) {
     url = `${BASE_URL}/products/search?q=${encodeURIComponent(search)}&limit=${limit}&skip=${skip}`;
   } else if (category) {
-    url = `${BASE_URL}/products/category/${encodeURIComponent(category)}?limit=${limit}&skip=${skip}`;
+    url = `${BASE_URL}/products/category/${category}?limit=${limit}&skip=${skip}`;
   } else {
     url = `${BASE_URL}/products?limit=${limit}&skip=${skip}`;
   }
 
-  const res = await fetch(url, {
-    cache: "no-store",
-  });
-  if (!res.ok) throw new Error(`Gagal fetch produk: ${res.status}`);
-  return res.json();
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("Gagal mengambil produk");
+  
+  const data: ProductsResponse = await res.json();
+  
+  return {
+    ...data,
+    products: data.products.map(adjustProductPrice),
+  };
 }
 
-// ─── ISR: next.revalidate ───────────────────────────────────────────────────
-// Data di-cache dan di-refresh otomatis setiap 60 detik.
-// Cocok untuk detail produk yang jarang berubah.
-
-export async function getProductById(id: number): Promise<Product> {
-  const res = await fetch(`${BASE_URL}/products/${id}`, {
-    next: { revalidate: 60 },
-  });
-  if (!res.ok) throw new Error(`Produk tidak ditemukan: ${res.status}`);
-  return res.json();
-}
-
-// ─── Utility Functions ──────────────────────────────────────────────────────
-
-export function formatCurrency(amount: number): string {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  }).format(amount);
-}
-
-export function calcDiscountedPrice(price: number, discountPercentage: number): number {
-  return price * (1 - discountPercentage / 100);
+export async function getProductById(id: number | string): Promise<Product> {
+  const res = await fetch(`${BASE_URL}/products/${id}`);
+  if (!res.ok) throw new Error(`Produk tidak ditemukan`);
+  
+  const product: Product = await res.json();
+  return adjustProductPrice(product);
 }

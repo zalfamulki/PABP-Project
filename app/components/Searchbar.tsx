@@ -44,28 +44,31 @@ export default function SearchBar() {
   }, [router, searchParams]);
 
   return (
-    <div className="relative flex-1 max-w-lg">
-      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+    <div className="relative w-full">
+      <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+        <Search className="w-5 h-5 text-neon-cyan opacity-70" />
+      </div>
       <input
         type="text"
         value={query}
         onChange={(e) => handleSearch(e.target.value)}
-        placeholder="Cari produk..."
-        className="w-full pl-10 pr-10 py-2.5 rounded-lg border border-gray-300 
-                   bg-white text-sm text-gray-900 placeholder-gray-400
-                   focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent
-                   transition-all duration-200"
+        placeholder="SCAN FOR GEARS, WEAPONS, OR ITEMS..."
+        className="w-full pl-12 pr-12 py-4 rounded-xl border border-white/10 
+                   bg-game-card text-sm text-white placeholder-gray-500
+                   focus:outline-none focus:ring-1 focus:ring-neon-cyan focus:border-neon-cyan/50
+                   transition-all duration-300 shadow-inner tracking-widest font-bold"
         aria-label="Cari produk"
       />
       {query && (
         <button
           onClick={handleClear}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+          className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-neon-pink transition-colors"
           aria-label="Hapus pencarian"
         >
-          <X className="w-4 h-4" />
+          <X className="w-5 h-5" />
         </button>
       )}
+      <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-neon-cyan transition-all duration-300 group-focus-within:w-full" />
     </div>
   );
 }

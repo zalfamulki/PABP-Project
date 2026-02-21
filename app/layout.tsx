@@ -9,10 +9,10 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: {
-    template: "%s | NextShop",
-    default: "NextShop — Modern E-Commerce Demo",
+    template: "%s | ZallShop",
+    default: "ZallShop — The Future of Game Marketplace",
   },
-  description: "Demo Next.js 14 dengan SSG, SSR, CSR, Zustand, dan optimasi performa.",
+  description: "ZallShop: Marketplace game futuristik yang dibangun dengan Next.js 14, SSG, SSR, CSR, dan Zustand.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

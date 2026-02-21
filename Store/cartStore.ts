@@ -65,7 +65,7 @@ export const useCartStore = create<CartState>()(
       clearCart: () => set({ items: [] }),
     }),
     {
-      name: "nextshop-cart",                         // key di localStorage
+      name: "zallshop-cart",                         // key di localStorage
       storage: createJSONStorage(() => localStorage),
     }
   )

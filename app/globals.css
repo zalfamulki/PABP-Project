@@ -2,13 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --background: #0a0b1e;
+  --foreground: #e2e8f0;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
 @layer components {
-  .btn-primary { @apply bg-indigo-600 hover:bg-indigo-700 text-white
-    font-semibold py-2 px-4 rounded-lg transition-all duration-200; }
-  .card { @apply bg-white rounded-xl shadow-sm border border-gray-100
-    hover:shadow-md transition-shadow duration-200; }
-  .badge { @apply inline-flex items-center px-2.5 py-0.5 rounded-full
-    text-xs font-medium; }
+  .btn-primary { 
+    @apply bg-indigo-600 hover:bg-indigo-700 text-white
+    font-semibold py-2 px-4 rounded-lg transition-all duration-200 shadow-[0_0_15px_rgba(79,70,229,0.4)]; 
+  }
+  .btn-neon {
+    @apply border border-neon-cyan text-neon-cyan hover:bg-neon-cyan hover:text-game-dark
+    font-semibold py-2 px-4 rounded-lg transition-all duration-200 shadow-[0_0_10px_rgba(0,243,255,0.3)];
+  }
+  .card { 
+    @apply bg-game-card rounded-xl shadow-lg border border-white/10
+    hover:border-neon-purple/50 transition-all duration-300 backdrop-blur-sm; 
+  }
+  .badge { 
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full
+    text-xs font-medium border border-white/20; 
+  }
+  .glass {
+    @apply bg-white/5 backdrop-blur-md border border-white/10;
+  }
+  .neon-text-cyan {
+    text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+  }
+  .neon-text-purple {
+    text-shadow: 0 0 10px rgba(188, 19, 254, 0.5);
+  }
 }
 
 @keyframes shimmer {
@@ -16,7 +45,22 @@
   100% { background-position: 200% 0; }
 }
 .skeleton {
-  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+  background: linear-gradient(90deg, #161b33 25%, #2f357d 50%, #161b33 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
+}
+
+/* Custom scrollbar for futuristic feel */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0a0b1e;
+}
+::-webkit-scrollbar-thumb {
+  background: #2f357d;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #bc13fe;
 }

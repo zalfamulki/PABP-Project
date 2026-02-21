@@ -3,24 +3,25 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { memo, useCallback } from "react";
+import { memo, useCallback, useState } from "react";
 import { Product, formatCurrency, calcDiscountedPrice } from "@/lib/api";
 import { useCartStore } from "@/Store/cartStore";
-import { ShoppingCart, Star } from "lucide-react";
+import { ShoppingCart, Star, Zap, Check } from "lucide-react";
 
 interface ProductCardProps {
   product: Product;
 }
 
-// memo() → hanya re-render jika props `product` berubah
 const ProductCard = memo(function ProductCard({ product }: ProductCardProps) {
+  const [added, setAdded] = useState(false);
   const addItem = useCartStore((state) => state.addItem);
 
-  // useCallback → fungsi tidak dibuat ulang setiap render
   const handleAddToCart = useCallback(
     (e: React.MouseEvent) => {
-      e.preventDefault(); // cegah navigasi Link
+      e.preventDefault();
       addItem(product);
+      setAdded(true);
+      setTimeout(() => setAdded(false), 2000);
     },
     [addItem, product]
   );
@@ -28,51 +29,57 @@ const ProductCard = memo(function ProductCard({ product }: ProductCardProps) {
   const discountedPrice = calcDiscountedPrice(product.price, product.discountPercentage);
 
   return (
-    <Link href={`/products/${product.id}`} className="group">
-      <div className="card flex flex-col h-full overflow-hidden transition-transform duration-200 group-hover:-translate-y-1">
+    <Link href={`/products/${product.id}`} className="group relative">
+      <div className="card flex flex-col h-full overflow-hidden transition-all duration-300 group-hover:shadow-[0_0_30px_rgba(188,19,254,0.3)] group-hover:border-neon-purple/50">
 
         {/* Gambar Produk */}
-        <div className="relative aspect-square bg-gray-100 overflow-hidden">
+        <div className="relative aspect-[4/5] bg-game-dark overflow-hidden">
           <Image
             src={product.thumbnail}
             alt={product.title}
             fill
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
-            loading="lazy" // lazy loading aktif
+            className="object-cover transition-transform duration-500 group-hover:scale-110"
+            loading="lazy"
           />
+          <div className="absolute inset-0 bg-gradient-to-t from-game-dark/80 via-transparent to-transparent" />
+          
           {product.discountPercentage > 0 && (
-            <span className="badge absolute top-2 left-2 bg-red-500 text-white">
-              -{Math.round(product.discountPercentage)}%
+            <span className="absolute top-2 right-2 px-2 py-0.5 rounded bg-neon-pink text-white text-[10px] font-black italic shadow-lg">
+              SALE {Math.round(product.discountPercentage)}%
             </span>
           )}
         </div>
 
         {/* Info Produk */}
-        <div className="flex flex-col flex-1 p-4 gap-2">
-          <span className="text-xs text-indigo-600 font-medium uppercase tracking-wide">
+        <div className="flex flex-col flex-1 p-4 gap-2 relative z-10 bg-game-card/50 backdrop-blur-sm">
+          <span className="text-[10px] text-neon-cyan font-bold uppercase tracking-widest flex items-center gap-1">
+            <Zap className="w-3 h-3" />
             {product.category}
           </span>
 
-          <h3 className="text-sm font-semibold text-gray-800 line-clamp-2 leading-snug">
+          <h3 className="text-sm font-bold text-white line-clamp-2 leading-tight group-hover:text-neon-cyan transition-colors">
             {product.title}
           </h3>
 
           {/* Rating */}
-          <div className="flex items-center gap-1">
-            <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-            <span className="text-xs text-gray-600">{product.rating}</span>
-            <span className="text-xs text-gray-400">({product.stock} stok)</span>
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-0.5">
+               <Star className="w-3 h-3 fill-neon-purple text-neon-purple" />
+               <span className="text-[10px] font-bold text-white">{product.rating}</span>
+            </div>
+            <div className="h-1 w-1 bg-gray-600 rounded-full" />
+            <span className="text-[10px] text-gray-500 font-bold uppercase tracking-tighter">{product.stock} IN STOCK</span>
           </div>
 
           {/* Harga + Tombol */}
-          <div className="mt-auto flex items-center justify-between">
+          <div className="mt-4 pt-4 border-t border-white/5 flex items-center justify-between">
             <div className="flex flex-col">
-              <span className="text-base font-bold text-gray-900">
+              <span className="text-lg font-black text-white tracking-tighter">
                 {formatCurrency(discountedPrice)}
               </span>
               {product.discountPercentage > 0 && (
-                <span className="text-xs text-gray-400 line-through">
+                <span className="text-[10px] text-gray-500 line-through">
                   {formatCurrency(product.price)}
                 </span>
               )}
@@ -80,11 +87,15 @@ const ProductCard = memo(function ProductCard({ product }: ProductCardProps) {
 
             <button
               onClick={handleAddToCart}
-              className="btn-primary flex items-center gap-1.5 text-sm py-1.5 px-3"
-              aria-label={`Tambah ${product.title} ke keranjang`}
+              disabled={added}
+              className={`p-2.5 rounded-lg border transition-all duration-300 ${
+                added
+                  ? "bg-neon-lime border-neon-lime text-game-dark"
+                  : "bg-white/5 border-white/10 text-white hover:bg-neon-purple hover:border-neon-purple"
+              }`}
+              aria-label={added ? "Berhasil ditambahkan" : `Tambah ${product.title} ke keranjang`}
             >
-              <ShoppingCart className="w-4 h-4" />
-              <span className="hidden sm:inline">Tambah</span>
+              {added ? <Check className="w-4 h-4" /> : <ShoppingCart className="w-4 h-4" />}
             </button>
           </div>
         </div>
