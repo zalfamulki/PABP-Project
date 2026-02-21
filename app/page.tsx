@@ -23,7 +23,7 @@ function Hero() {
         <div className="max-w-2xl">
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 text-sm font-medium mb-4">
             <Zap className="w-4 h-4" />
-            Next.js 14 · SSG · SSR · CSR
+            Demo Next.js · SSG, SSR, CSR, Zustand
           </span>
 
           <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight mb-4">
