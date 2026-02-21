@@ -2,26 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@layer components {
+  .btn-primary { @apply bg-indigo-600 hover:bg-indigo-700 text-white
+    font-semibold py-2 px-4 rounded-lg transition-all duration-200; }
+  .card { @apply bg-white rounded-xl shadow-sm border border-gray-100
+    hover:shadow-md transition-shadow duration-200; }
+  .badge { @apply inline-flex items-center px-2.5 py-0.5 rounded-full
+    text-xs font-medium; }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
-
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+.skeleton {
+  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
 }
